@@ -15,7 +15,7 @@
     // Pole obsahující mapování mezi češtinou a angličtinou
     const translations = {
         'Hide': 'Skrýt',
-        'Seznam': 'List',
+        'Invite': 'Pozvánka',
         'Dokončeno': 'Completed',
         // Přidejte další překlady podle potřeby
     };
