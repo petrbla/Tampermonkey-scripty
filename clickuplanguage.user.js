@@ -5,7 +5,7 @@
 // @description  Překládá text mezi angličtinou a češtinou na webu ClickUp
 // @author       Petr Blaha
 // @match        https://app.clickup.com/*
-// @updateURL    https://raw.githubusercontent.com/mujUzivatel/mujRepozitar/main/mujSkript.user.js
+// @updateURL    https://github.com/petrbla/Tampermonkey-scripty/raw/main/clickuplanguage.user.js
 // @grant        none
 // ==/UserScript==
 
