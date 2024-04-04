@@ -17,6 +17,8 @@
         'Hide': 'Skrýt',
         'Invite': 'Pozvánka',
         'Share': 'Sdílet',
+        'Today': 'Dnes',
+        
         // Přidejte další překlady podle potřeby
     };
 
