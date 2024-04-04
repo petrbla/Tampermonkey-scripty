@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ClickUp EN-CZ Translator
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Překládá text mezi angličtinou a češtinou na webu ClickUp
 // @author       Petr Blaha
 // @match        https://app.clickup.com/*
