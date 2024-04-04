@@ -16,7 +16,7 @@
     const translations = {
         'Hide': 'Skrýt',
         'Invite': 'Pozvánka',
-        'Dokončeno': 'Completed',
+        'Share': 'Sdílet',
         // Přidejte další překlady podle potřeby
     };
 
