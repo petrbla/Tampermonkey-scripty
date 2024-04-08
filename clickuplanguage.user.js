@@ -1,61 +1,81 @@
 // ==UserScript==
-// @name         ClickUp EN-CZ Translator
+// @name         ClickUp EN-CZ Translator - GitHub Translations
 // @namespace    http://tampermonkey.net/
-// @version      0.2
-// @description  Překládá text mezi angličtinou a češtinou na webu ClickUp
-// @author       Petr Blaha
+// @version      0.1.6
+// @license      MIT
+// @description  Aplikuje překlady z externího zdroje na GitHubu.
+// @author       You
 // @match        https://app.clickup.com/*
-// @updateURL    https://github.com/petrbla/Tampermonkey-scripty/raw/main/clickuplanguage.user.js
-// @grant        none
+// @grant        GM_xmlhttpRequest
+// @downloadURL https://update.greasyfork.org/scripts/491650/ClickUp%20EN-CZ%20Translator%20-%20GitHub%20Translations.user.js
+// @updateURL https://update.greasyfork.org/scripts/491650/ClickUp%20EN-CZ%20Translator%20-%20GitHub%20Translations.meta.js
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-    // Pole obsahující mapování mezi češtinou a angličtinou
-    const translations = {
-        'Hide': 'Skrýt',
-        'Invite': 'Pozvánka',
-        'Share': 'Sdílet',
-        'Today': 'Dnes',
-        
-        // Přidejte další překlady podle potřeby
-    };
+    // Inicializace prázdného objektu pro překlady
+    let translations = {};
 
-    // Funkce pro překlad textu
-    function translateText(text) {
-        const translatedText = translations[text] || text;
-        return translatedText;
-    }
-
-    // Funkce pro procházení DOM a překlad textových uzlů
-    function walkAndTranslate(node) {
-        if (node.nodeType === Node.TEXT_NODE) {
-            const translatedText = translateText(node.nodeValue.trim());
-            if (translatedText !== node.nodeValue) {
-                const newNode = document.createTextNode(translatedText);
-                node.parentNode.replaceChild(newNode, node);
-            }
-        } else {
-            for (let i = 0; i < node.childNodes.length; i++) {
-                walkAndTranslate(node.childNodes[i]);
+    // Funkce pro načtení překladů z GitHubu
+    function loadTranslations() {
+    GM_xmlhttpRequest({
+        method: "GET",
+        url: "https://raw.githubusercontent.com/petrbla/Tampermonkey-scripty/main/translationsclickupcz.json",
+        onload: function(response) {
+            console.log("Odpověď načtena", response.responseText);
+            translations = JSON.parse(response.responseText);
+            console.log("Načtené překlady:", translations);
+            applyTranslations(document.body);
+        },
+        onerror: function(error) {
+            console.log("Chyba při načítání překladů", error);
+        },
+        onreadystatechange: function(response) {
+            if (response.readyState === 4 && response.status !== 200) {
+                console.log("Chyba - stav: ", response.status);
             }
         }
-    }
+    }); // Zde chyběla uzavírací závorka
+}
 
-    // Spuštění překladu při načtení stránky
-    window.addEventListener('load', function() {
-        walkAndTranslate(document.body);
+    function applyTranslations(element) {
+    if (!element || !element.querySelectorAll) return;
+    
+    // Zahrnutí elementů s atributem placeholder do vyhledávání
+    const nodes = element.querySelectorAll('*');
+    nodes.forEach(node => {
+        // Překlad textových uzlů
+        if (node.childNodes.length === 1 && node.childNodes[0].nodeType === Node.TEXT_NODE) {
+            const text = node.childNodes[0].nodeValue.trim();
+            const translatedText = translations[text];
+            if (translatedText) {
+                node.childNodes[0].nodeValue = translatedText;
+            }
+        }
+        // Překlad placeholderů
+        if (node.placeholder) {
+            const placeholderText = node.placeholder.trim();
+            const translatedPlaceholder = translations[placeholderText];
+            if (translatedPlaceholder) {
+                node.placeholder = translatedPlaceholder;
+            }
+        }
     });
+}
 
-    // Spuštění překladu při změně DOM
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            Array.from(mutation.addedNodes).forEach(function(node) {
-                walkAndTranslate(node);
-            });
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.addedNodes.length) {
+                mutation.addedNodes.forEach((newNode) => {
+                    applyTranslations(newNode);
+                });
+            }
         });
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
+
+    // Spustí načtení překladů a aplikaci při načtení stránky
+    window.addEventListener('load', loadTranslations);
 })();
