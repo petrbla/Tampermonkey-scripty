@@ -142,5 +142,7 @@
     "Goal name":"Název cíle",
     "press ENTER":"stiskněte ENTER",
     "Who has access to this Goal?": "Kdo má přístup k tomuto cíli?",
+    "Private": "Soukromé",
+    "Workspace": "Pracovní prostor",
   "Assignee": "Přiřazený"
 }
