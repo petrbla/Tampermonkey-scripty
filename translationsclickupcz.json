@@ -153,6 +153,7 @@
     "What do you want to do? Goals are high-level containers that can be broken down into smaller": "Co chcete udělat? Cíle jsou vysokoúrovňové kontejnery, které lze rozdělit na menší",
     "Targets": "Cíle",
     "Whoops! Goal name is required": "Jejda! Název cíle je povinný",
-    "Who is responsible for this Goal?": "Kdo je zodpovědný za tento cíl?"
+    "Who is responsible for this Goal?": "Kdo je zodpovědný za tento cíl?",
+    "Choose owner(s)":"Výběr vlastníka (vlastníků)",
   "Assignee": "Přiřazený"
 }
