@@ -150,5 +150,9 @@
     "End Date": "Datum ukončení",
     "This is optional. A short explanation why this Goal is set and how it should be achieved.": "Toto je nepovinné. Krátké vysvětlení, proč byl tento cíl stanoven a jak by měl být dosažen.",
     "Write something or type '/' for commands and AI actions":"Napište něco nebo zadejte '/' pro příkazy a akce s AI.",
+    "What do you want to do? Goals are high-level containers that can be broken down into smaller": "Co chcete udělat? Cíle jsou vysokoúrovňové kontejnery, které lze rozdělit na menší",
+    "Targets": "Cíle",
+    "Whoops! Goal name is required": "Jejda! Název cíle je povinný",
+    "Who is responsible for this Goal?": "Kdo je zodpovědný za tento cíl?"
   "Assignee": "Přiřazený"
 }
