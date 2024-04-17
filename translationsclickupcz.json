@@ -153,6 +153,13 @@
     "What do you want to do? Goals are high-level containers that can be broken down into smaller Targets": "Co chcete udělat? Cíle jsou vysokoúrovňové kontejnery, které lze rozdělit na menší cíle",
     "Whoops! Goal name is required": "Jejda! Název cíle je povinný",
     "Who is responsible for this Goal?": "Kdo je zodpovědný za tento cíl?",
+    "Sort by":"Seřadit podle",
+    "Updated":"Aktualizováno",
+    "Due date":"Termín odevzdání",
+    "Start Date":"Datum zahájení",
+    "Change color":"Změnit barvu",
+    "Move to Folder":"Přesunout do složky",
+    "Archive":"Archivovat",
     "Choose owner(s)":"Výběr vlastníka (vlastníků)",
   "Assignee": "Přiřazený"
 }
