@@ -39,21 +39,25 @@
     }); // Zde chyběla uzavírací závorka
 }
 
-    function applyTranslations(element) {
-    if (!element || !element.querySelectorAll) return;
+   
     
-    // Zahrnutí elementů s atributem placeholder do vyhledávání
-    const nodes = element.querySelectorAll('*');
-    nodes.forEach(node => {
-        // Překlad textových uzlů
-        if (node.childNodes.length === 1 && node.childNodes[0].nodeType === Node.TEXT_NODE) {
-            const text = node.childNodes[0].nodeValue.trim();
+    
+function applyTranslations(element) {
+    if (!element || !element.querySelectorAll) return;
+
+    // Rekurzivní funkce pro zpracování všech textových uzlů elementu
+    function translateTextNode(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.nodeValue.trim();
             const translatedText = translations[text];
             if (translatedText) {
-                node.childNodes[0].nodeValue = translatedText;
+                node.nodeValue = translatedText;
             }
+        } else {
+            node.childNodes.forEach(translateTextNode); // Rekurzivní volání pro všechny potomky
         }
-        // Překlad placeholderů
+
+        // Překlad placeholderů, pokud jsou k dispozici
         if (node.placeholder) {
             const placeholderText = node.placeholder.trim();
             const translatedPlaceholder = translations[placeholderText];
@@ -61,7 +65,11 @@
                 node.placeholder = translatedPlaceholder;
             }
         }
-    });
+    }
+
+    // Aplikace rekurzivní funkce na všechny elementy a jejich potomky
+    translateTextNode(element); // Aplikace na kořenový element
+    element.querySelectorAll('*').forEach(translateTextNode); // Aplikace na všechny potomky
 }
 
     const observer = new MutationObserver((mutations) => {
