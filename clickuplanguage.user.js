@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ClickUp EN-CZ Translator - GitHub Translations
 // @namespace    http://tampermonkey.net/
-// @version      0.1.9
+// @version      0.1.10
 // @license      MIT
 // @description  Aplikuje překlady z externího zdroje na GitHubu.
 // @author       You
@@ -9,75 +9,67 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
+
 (function() {
     'use strict';
 
-    // Inicializace prázdného objektu pro překlady
     let translations = {};
 
-    // Funkce pro načtení překladů z GitHubu
     function loadTranslations() {
-    GM_xmlhttpRequest({
-        method: "GET",
-        url: "https://raw.githubusercontent.com/petrbla/Tampermonkey-scripty/main/translationsclickupcz.json",
-        onload: function(response) {
-            translations = JSON.parse(response.responseText);
-            applyTranslations(document.body);
-        },
-        onerror: function(error) {
-            console.log("Chyba při načítání překladů", error);
-        },
-        onreadystatechange: function(response) {
-            if (response.readyState === 4 && response.status !== 200) {
-                console.log("Chyba - stav: ", response.status);
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: "https://raw.githubusercontent.com/petrbla/Tampermonkey-scripty/main/translationsclickupcz.json",
+            onload: function(response) {
+                translations = JSON.parse(response.responseText);
+                applyTranslations(document.body);
+            },
+            onerror: function(error) {
+                console.log("Chyba při načítání překladů", error);
             }
-        }
-    });
-}
-
-    function applyTranslations(element) {
-    if (!element || !element.querySelectorAll) return;
-
-    // Rekurzivní funkce pro zpracování všech textových uzlů elementu
-    function translateTextNode(node) {
-        if (node.nodeType === Node.TEXT_NODE) {
-            const text = node.nodeValue.trim();
-            const translatedText = translations[text];
-            if (translatedText) {
-                node.nodeValue = translatedText;
-            }
-        } else {
-            node.childNodes.forEach(translateTextNode); // Rekurzivní volání pro všechny potomky
-        }
-
-        // Překlad placeholderů, pokud jsou k dispozici
-        if (node.placeholder) {
-            const placeholderText = node.placeholder.trim();
-            const translatedPlaceholder = translations[placeholderText];
-            if (translatedPlaceholder) {
-                node.placeholder = translatedPlaceholder;
-            }
-        }
+        });
     }
 
-    // Aplikace rekurzivní funkce na všechny elementy a jejich potomky
-    translateTextNode(element); // Aplikace na kořenový element
-    element.querySelectorAll('*').forEach(translateTextNode); // Aplikace na všechny potomky
-}
+    function applyTranslations(element) {
+        if (!element || !element.querySelectorAll) return;
 
-
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.addedNodes.length) {
-                mutation.addedNodes.forEach((newNode) => {
-                    applyTranslations(newNode);
-                });
+        function translateTextNode(node) {
+            if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim()) {
+                const translatedText = translations[node.nodeValue.trim()];
+                if (translatedText) {
+                    node.nodeValue = translatedText;
+                }
+            } else {
+                node.childNodes.forEach(translateTextNode);
             }
+
+            if (node.placeholder) {
+                const translatedPlaceholder = translations[node.placeholder.trim()];
+                if (translatedPlaceholder) {
+                    node.placeholder = translatedPlaceholder;
+                }
+            }
+        }
+
+        translateTextNode(element);
+        element.querySelectorAll('*').forEach(translateTextNode);
+    }
+
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(newNode => {
+                if (newNode.nodeType === Node.ELEMENT_NODE) {
+                    applyTranslations(newNode);
+                }
+            });
         });
     });
 
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        characterData: true
+    });
 
-    // Spustí načtení překladů a aplikaci při načtení stránky
     window.addEventListener('load', loadTranslations);
 })();
